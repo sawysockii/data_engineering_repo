@@ -90,8 +90,6 @@ SELECT LastName, Salary_RUB FROM MAIN ORDER BY Salary_RUB DESC LIMIT 1;
 
 SELECT LastName FROM MAIN ORDER BY LastName ASC;
 
-SELECT Position_level, AVG(Salary_RUB) AS Salary_AVG_RUB FROM MAIN GROUP BY Position_level ORDER BY Salary_AVG_RUB DESC;
-
 WITH NAMES_UNITS AS(
 SELECT LastName, UNITS.unit_name FROM MAIN FULL JOIN UNITS ON UNITS.Unit_id = MAIN.Unit_id
 )
@@ -104,3 +102,5 @@ MAX_SALARY_IN_UNIT AS(
 SELECT MAX(Salary_RUB) AS MAX_Salary_RUB, Unit_name FROM NAMES_UNITS_SALARIES GROUP BY Unit_name
 )
 SELECT LastName, MSIU.unit_name, MAX_Salary_RUB FROM MAX_SALARY_IN_UNIT AS MSIU JOIN NAMES_UNITS_SALARIES AS NUS ON MSIU.MAX_Salary_RUB = NUS.Salary_RUB;
+
+SELECT Position_level, AVG(age(StartedDate)) AS Average_Experience_in_Company FROM MAIN GROUP BY Position_level ORDER BY Average_Experience_in_Company ASC;
