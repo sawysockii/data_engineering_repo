@@ -86,18 +86,21 @@ INSERT INTO GRADES (Grade_Q1, Grade_Q2, Grade_Q3, Grade_Q4) VALUES
    ('B', 'A', 'B', 'A'),
    ('B', 'C', 'C', 'C');
 
-WITH NAMES_GRADES AS(
-SELECT FirstName, ParentName, LastName, Position_, GRADES.Grade_Q1, GRADES.Grade_Q2, GRADES.Grade_Q2, GRADES.Grade_Q2 FROM MAIN RIGHT JOIN GRADES ON GRADES.ID = MAIN.ID
+SELECT LastName, Salary_RUB FROM MAIN ORDER BY Salary_RUB DESC LIMIT 1;
+
+SELECT LastName FROM MAIN ORDER BY LastName ASC;
+
+SELECT Position_level, AVG(Salary_RUB) AS Salary_AVG_RUB FROM MAIN GROUP BY Position_level ORDER BY Salary_AVG_RUB DESC;
+
+WITH NAMES_UNITS AS(
+SELECT LastName, UNITS.unit_name FROM MAIN FULL JOIN UNITS ON UNITS.Unit_id = MAIN.Unit_id
 )
+SELECT * FROM NAMES_UNITS;
 
-SELECT * FROM NAMES_GRADES;
-
-SELECT ID, FirstName, ParentName, LastName, age(StartedDate) as Working_in_company_for FROM MAIN;
-
-SELECT ID, FirstName, ParentName, LastName, age(StartedDate) as Working_in_company_for FROM MAIN LIMIT 3;
-
-SELECT ID FROM MAIN WHERE HasRights = TRUE;
-
-SELECT ID FROM GRADES WHERE (Grade_Q1 = 'D' OR  Grade_Q1 = 'E' OR Grade_Q2 = 'D' OR  Grade_Q2 = 'E' OR Grade_Q3 = 'D' OR  Grade_Q3 = 'E' OR Grade_Q4 = 'D' OR  Grade_Q4 = 'E');
-
-SELECT Salary_RUB FROM MAIN ORDER BY Salary_RUB DESC LIMIT 1
+WITH NAMES_UNITS_SALARIES AS(
+SELECT LastName, Salary_RUB, UNITS.unit_name FROM MAIN FULL JOIN UNITS ON UNITS.Unit_id = MAIN.Unit_id
+),
+MAX_SALARY_IN_UNIT AS(
+SELECT MAX(Salary_RUB) AS MAX_Salary_RUB, Unit_name FROM NAMES_UNITS_SALARIES GROUP BY Unit_name
+)
+SELECT LastName, MSIU.unit_name, MAX_Salary_RUB FROM MAX_SALARY_IN_UNIT AS MSIU JOIN NAMES_UNITS_SALARIES AS NUS ON MSIU.MAX_Salary_RUB = NUS.Salary_RUB;
